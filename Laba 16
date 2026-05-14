@@ -1,0 +1,41 @@
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.util.regex.*;
+
+public class Main {
+    public static void main(String[] args) {
+        String file = "C:\\Users\\Пользователь\\IdeaProjects\\Laba 16\\src\\Код с комментариями.txt";
+        String newfile = "C:\\Users\\Пользователь\\IdeaProjects\\Laba 16\\src\\Новый код.txt";
+        File file1 = new File(file);
+        File file2 = new File(newfile);
+        try {
+
+            if (file1.exists()) {
+                System.out.println("Файл с кодом с комментариями существует!");
+            } else {
+                System.out.println("Файл не найден!");
+                return;
+            }
+
+            try (FileReader fr = new FileReader(file1)) {
+                StringBuilder sb = new StringBuilder();
+                int code;
+                while ((code = fr.read()) != -1) {
+                    sb.append(Character.toChars(code));
+                }
+                String res = sb.toString().replaceAll("//.*|/\\*(\\s|.)*?\\s\\*/", "");
+                System.out.println(res);
+                try (FileWriter fw = new FileWriter(file2)) {
+                    for (int i = 0; i < res.length(); i++) {
+                        fw.write(res.charAt(i));
+                    }
+                    System.out.println("Файл сохранен!");
+                }
+            }
+        }
+        catch (Exception ex) {
+            System.out.println("Ошибка: " + ex.getMessage());
+        }
+    }
+}
